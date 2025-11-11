@@ -11,8 +11,8 @@ OpenStrand is distributed as a single npm workspace. Every deployable artifact i
 | Package / App                     | npm name / output                 | License | Notes                                                   |
 |----------------------------------|-----------------------------------|---------|--------------------------------------------------------|
 | `openstrand-app/`                | — (Next.js app)                   | MIT     | User-facing PKMS experience. Deployed as static build or Vercel app. |
-| `packages/openstrand-teams-backend/` | `@openstrand/teams-backend`     | MIT     | Fastify API + Prisma. Publishes compiled Node bundle and type defs. |
-| `packages/openstrand-sdk/`       | `@openstrand/sdk`                 | MIT     | TypeScript SDK + shared schemas (CJS + ESM + `.d.ts`). |
+| `packages/openstrand-teams-backend/` | `@framers/openstrand-teams-backend`     | MIT     | Fastify API + Prisma. Publishes compiled Node bundle and type defs. |
+| `packages/openstrand-sdk/`       | `@framers/openstrand-sdk`                 | MIT     | TypeScript SDK + shared schemas (CJS + ESM + `.d.ts`). |
 | `openstrand-admin/`              | — (optional)                      | UNLICENSED | Private admin UI kept out of OSS distribution.        |
 
 All packages inherit tooling from the root workspace (`tsconfig.base.json`, ESLint, Prettier).
@@ -21,18 +21,18 @@ All packages inherit tooling from the root workspace (`tsconfig.base.json`, ESLi
 
 ## Build Outputs
 
-### Backend (`@openstrand/teams-backend`)
+### Backend (`@framers/openstrand-teams-backend`)
 - Targets Node 18 LTS.
 - Emits `dist/` with compiled JS + type declarations.
 - Includes Prisma schema and migrations (`prisma/`).
 - Production start command: `node dist/server.js`.
 
-### SDK (`@openstrand/sdk`)
+### SDK (`@framers/openstrand-sdk`)
 - Bundled with `tsup`.
 - Dual package export map:
   ```
-  import { OpenStrandClient } from '@openstrand/sdk'          // ESM
-  const { OpenStrandClient } = require('@openstrand/sdk')     // CommonJS
+  import { OpenStrandClient } from '@framers/openstrand-sdk'          // ESM
+  const { OpenStrandClient } = require('@framers/openstrand-sdk')     // CommonJS
   ```
 - Generated types stay in sync with backend contracts.
 
@@ -49,8 +49,8 @@ All packages inherit tooling from the root workspace (`tsconfig.base.json`, ESLi
 2. `npm run build` to compile every workspace.
 3. Publish artifacts:
    ```bash
-   npm publish --workspace @openstrand/sdk
-   npm publish --workspace @openstrand/teams-backend
+   npm publish --workspace @framers/openstrand-sdk
+   npm publish --workspace @framers/openstrand-teams-backend
    ```
 4. Tag the release (`git tag vX.Y.Z`) and push.
 5. Deploy frontend via CI (Vercel, Netlify, or static hosting).
@@ -69,7 +69,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY packages/openstrand-teams-backend ./packages/openstrand-teams-backend
 RUN npm install --omit=dev
-RUN npm run build --workspace @openstrand/teams-backend
+RUN npm run build --workspace @framers/openstrand-teams-backend
 
 FROM node:18-alpine
 WORKDIR /app
@@ -104,8 +104,8 @@ Set `OPENSTRAND_ENVIRONMENT` + `OPENSTRAND_IS_CLOUD` per environment so the app 
 
 | Artefact       | Description                          | Source command                                    |
 |----------------|--------------------------------------|---------------------------------------------------|
-| SDK package    | npm tarball (`@openstrand/sdk`)      | `npm run build --workspace @openstrand/sdk`       |
-| Backend bundle | Node bundle + Prisma schema          | `npm run build --workspace @openstrand/teams-backend` |
+| SDK package    | npm tarball (`@framers/openstrand-sdk`)      | `npm run build --workspace @framers/openstrand-sdk`       |
+| Backend bundle | Node bundle + Prisma schema          | `npm run build --workspace @framers/openstrand-teams-backend` |
 | Frontend app   | Next.js build output (`.next/`)      | `npm run build --workspace openstrand-app`        |
 | Docker image   | Optional runtime image               | `docker build -f Dockerfile.backend .`            |
 

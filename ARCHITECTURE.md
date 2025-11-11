@@ -15,7 +15,7 @@ openstrand-app (Next.js, React 18)
         │          ▲
 REST / WebSockets  │ SWR (React Query)
         ▼          │
-@openstrand/teams-backend (Fastify + Prisma)
+@framers/openstrand-teams-backend (Fastify + Prisma)
         │
         ▼
 PostgreSQL ─── or ─── PGlite (embedded)  ← fallback for local/offline
@@ -59,7 +59,7 @@ All workspaces are managed with npm workspaces and a single `package-lock.json`.
 - Dynamic routing covers: `/strands`, `/threads`, `/pkms`, `/settings`.
 - Feature gating reads `OPENSTRAND_ENVIRONMENT` to hide cloud-only flows on local installs.
 
-### Backend – `@openstrand/teams-backend`
+### Backend – `@framers/openstrand-teams-backend`
 - Fastify 4 with typed routes (Zod schemas).
 - Prisma ORM to target both PostgreSQL (cloud) and PGlite (embedded).
 - Modular services: billing, search, graph analytics, AI integrations, ingestion pipelines.
@@ -68,7 +68,7 @@ All workspaces are managed with npm workspaces and a single `package-lock.json`.
 - Rate limiting and structured logging baked in (pino + pino-pretty for dev).
 - Collaborative notes: recursive strand hierarchies, placeholder policies, link attribution, and approval flows exposed via `/strands`, `/strands/:id/relationships`, and `/strands/:id/structure/requests`.
 
-### Shared SDK – `@openstrand/sdk`
+### Shared SDK – `@framers/openstrand-sdk`
 - Generated types from Prisma schema and OpenAPI routes.
 - Node + Browser friendly bundle (`CJS`, `ESM`, and `.d.ts` outputs).
 - Fetch wrapper with retry/backoff, SSE helpers for long-running tasks.
@@ -176,8 +176,8 @@ See [`docs/ROADMAP.md`](ROADMAP.md) for detailed milestones.
 ## 10. Developer Notes
 
 - Use `npm run typecheck` before commits; workspaces share `tsconfig.base.json`.
-- When touching Prisma schema run `npm run prisma:generate --workspace @openstrand/teams-backend`.
+- When touching Prisma schema run `npm run prisma:generate --workspace @framers/openstrand-teams-backend`.
 - Keep features behind `featureFlags` (frontend) or `FeatureGate` (backend) for gradual rollout.
-- Prefer `@openstrand/sdk` helpers when consuming APIs to avoid drifting types.
+- Prefer `@framers/openstrand-sdk` helpers when consuming APIs to avoid drifting types.
 
 The architecture is intentionally modular—swap providers, plug in additional queues, or override services by extending the relevant Fastify plugin. Contributions that keep this separation clean are very welcome.

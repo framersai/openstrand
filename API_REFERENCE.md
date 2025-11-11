@@ -7,7 +7,7 @@
 ## Quick Start with SDK
 
 ```typescript
-import { OpenStrandClient } from '@openstrand/sdk';
+import { OpenStrandClient } from '@framers/openstrand-sdk';
 
 const client = new OpenStrandClient({
   apiUrl: 'https://api.openstrand.com',
@@ -177,7 +177,7 @@ For complete API documentation with all endpoints, see:
 The TypeScript SDK provides type-safe access to all endpoints:
 
 ```bash
-npm install @openstrand/sdk
+npm install @framers/openstrand-sdk
 ```
 
-See [SDK Guide](https://www.npmjs.com/package/@openstrand/sdk) for detailed usage.
+See [SDK Guide](https://www.npmjs.com/package/@framers/sdk) for detailed usage.

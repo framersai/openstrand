@@ -30,8 +30,8 @@ OpenStrand consists of three main packages:
 | Package | Description | Repository |
 |---------|-------------|------------|
 | **openstrand-app** | Next.js frontend application | [GitHub](https://github.com/framersai/openstrand-app) |
-| **@openstrand/teams-backend** | Fastify API server with Prisma | [GitHub](https://github.com/framersai/openstrand-teams-backend) |
-| **@openstrand/sdk** | TypeScript SDK for integrations | [npm](https://www.npmjs.com/org/framers) |
+| **@framers/openstrand-teams-backend** | Fastify API server with Prisma | [GitHub](https://github.com/framersai/openstrand-teams-backend) |
+| **@framers/openstrand-sdk** | TypeScript SDK for integrations | [npm](https://www.npmjs.com/org/framers) |
 
 ## 🎯 Quick Start
 
@@ -65,11 +65,11 @@ docker run -p 3000:3000 framersai/openstrand:latest
 ### Using the SDK
 
 ```bash
-npm install @openstrand/sdk
+npm install @framers/openstrand-sdk
 ```
 
 ```typescript
-import { OpenStrandClient } from '@openstrand/sdk';
+import { OpenStrandClient } from '@framers/openstrand-sdk';
 
 const client = new OpenStrandClient({
   apiUrl: 'https://api.openstrand.ai'
@@ -140,7 +140,7 @@ npm test
 ## 💬 Community
 
 - **Discord**: [Join our community](https://discord.gg/openstrandai)
-- **Twitter/X**: [@openstrandai](https://twitter.com/openstrandai)
+- **Twitter/X**: [@framersai](https://twitter.com/openstrandai)
 - **Blog**: [openstrand.ai/blog](https://openstrand.ai/blog)
 
 ## 📄 License
