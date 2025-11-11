@@ -31,12 +31,12 @@ OpenStrand consists of three main packages:
 |---------|-------------|------------|
 | **openstrand-app** | Next.js frontend application | [GitHub](https://github.com/framersai/openstrand-app) |
 | **@openstrand/teams-backend** | Fastify API server with Prisma | [GitHub](https://github.com/framersai/openstrand-teams-backend) |
-| **@openstrand/sdk** | TypeScript SDK for integrations | [npm](https://www.npmjs.com/package/@openstrand/sdk) |
+| **@openstrand/sdk** | TypeScript SDK for integrations | [npm](https://www.npmjs.com/org/framers) |
 
 ## 🎯 Quick Start
 
 ### Option 1: Cloud Hosted (Easiest)
-Visit [openstrand.com](https://openstrand.com) to start with a free account.
+Visit [openstrand.ai](https://openstrand.ai) to start with a free account.
 
 ### Option 2: Local Development
 
@@ -72,7 +72,7 @@ npm install @openstrand/sdk
 import { OpenStrandClient } from '@openstrand/sdk';
 
 const client = new OpenStrandClient({
-  apiUrl: 'https://api.openstrand.com'
+  apiUrl: 'https://api.openstrand.ai'
 });
 
 // Create a strand (unit of knowledge)
@@ -98,7 +98,7 @@ S3_BUCKET=your-bucket
 REDIS_URL=redis://...
 ```
 
-See [Configuration Guide](https://github.com/framersai/openstrand-monorepo/blob/main/docs/ENVIRONMENT.md) for full options.
+See our public repo at [github.com/framersai/openstrand](https://github.com/framersai/openstrand) for configuration references.
 
 ## 🗺️ Roadmap
 
@@ -135,14 +135,13 @@ npm test
 
 - [Architecture Overview](ARCHITECTURE.md)
 - [API Reference](API_REFERENCE.md)
-- [Deployment Guide](DEPLOYMENT.md)
 - [SDK Documentation](SDK_GUIDE.md)
 
 ## 💬 Community
 
-- **Discord**: [Join our community](https://discord.gg/openstrand)
-- **Twitter**: [@openstrand](https://twitter.com/openstrand)
-- **Blog**: [blog.openstrand.com](https://blog.openstrand.com)
+- **Discord**: [Join our community](https://discord.gg/openstrandai)
+- **Twitter/X**: [@openstrandai](https://twitter.com/openstrandai)
+- **Blog**: [openstrand.ai/blog](https://openstrand.ai/blog)
 
 ## 📄 License
 
@@ -152,7 +151,7 @@ OpenStrand is MIT licensed. See [LICENSE](LICENSE) for details.
 
 For enterprise features including SSO, SLA support, and on-premise deployment:
 - Email: enterprise@frame.dev
-- Website: [openstrand.com/enterprise](https://openstrand.com/enterprise)
+- Website: [openstrand.ai/enterprise](https://openstrand.ai/enterprise)
 
 ---
 
