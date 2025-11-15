@@ -5639,6 +5639,13 @@ class SustainabilityModel {
   - `StrandAnalyticsPanel`, `LoomAnalyticsPanel`, `WeaveAnalyticsPanel` render inside the PKMS dashboard using only existing libs (`recharts`, `d3-scale`, `chart.js` elsewhere).
   - `<LazyChart>` defers chart mounts via `IntersectionObserver` + skeleton fallback to keep TTI low; heavy packages are loaded only when scrolled into view.
   - Community edition pins `workspaceKey=community` and displays a single Loom with upgrade CTA; Teams/cloud builds expose multi-loom selectors and per-team weave dashboards (`team:${teamId}` keys).
+- **Illustrations & visual language:**
+  - Illustration prompts are built from:
+    - The immediate strand/page summary.
+    - A high-level style preset (flat pastel, chalkboard, blueprint, retro comic, etc.).
+    - Optional **visual language defaults** configured in the admin console (persisted via `Weave.config.illustrationStyle`) and Loom-level overrides via `StrandScope.metadata.illustrationStyle`.
+    - An optional tiny **RAG context window** (1–3 nearby chunks) summarised into short semantic hints – used only to bias composition, with explicit instructions *not* to render text blocks.
+  - Admins can edit the global illustration defaults from the `openstrand-admin` dashboard under *Environment settings → Illustration defaults*; these act as a base layer that teams/looms may override.
 - **UI highlights**:
   - Strand panel: entity histogram, POS donut, keyword cloud, readability gauges, sentiment + rating badges, embedding summary, metadata chips.
   - Loom panel: total strands/tokens, average tokens per strand, topic distribution, vocabulary growth area chart, embedding coverage + rating aggregates.

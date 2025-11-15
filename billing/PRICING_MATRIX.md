@@ -27,6 +27,12 @@ Fair, transparent comparison of Community vs Teams/Enterprise features.
 | SSO & governance | — | Yes |
 | Billing & quotas | — | Usage metering + SLA dashboards + cost tracking |
 
+### Assistant (OS / “Weaver”)
+
+- Daily check-ins to feed: Community + Teams
+- Hourly evaluations (configurable to the minute): Teams/Enterprise
+- Admin team announcements via assistant channel: All plans; advanced controls on Teams/Enterprise
+
 ### Pricing & Licensing
 
 - **Community Edition** – Free, MIT-licensed, and lifetime by default. Feature parity with Teams except for multi-tenant/project/user functionality. Users may optionally sign in (Supabase, email, etc.) for sync/backups, but still operate a **single global workspace**.
