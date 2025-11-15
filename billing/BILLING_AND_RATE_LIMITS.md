@@ -78,4 +78,17 @@ This document defines how plans, BYOK, and credit limits are enforced across loc
 
 All usage records include metadata: operation, model/provider, isBYOK flag, requestId (when available).
 
+## Assistant Credit Pools (OS / "Weaver")
+
+| Plan / Scope | Included Assistant Credits (global keys) | Notes |
+| --- | --- | --- |
+| Community (hosted) | 0 assistant_tokens by default | Assistant still runs daily check-ins using heuristics + local/NLP logic. Users/teams can add BYOK keys; optional marketing pool of 2M tokens/month/user can be enabled manually. |
+| Teams / Enterprise (managed cloud) | 25M assistant_tokens per month per paying seat | Covers hourly evaluations + daily check-ins on the mini model tier (~$0.24/1M tokens cost). Additional packs (50M tokens = $25) or BYOK for heavy teams. |
+| BYOK (any plan) | Unlimited (metered for analytics only) | Usage recorded but not decremented from global credits. Still subject to rate limits to avoid spam. |
+
+- `assistant_tokens` assume mini/instruct model pricing (~$0.15/1M in, $0.60/1M out); internal cost ≈ $0.24/1M tokens, giving 4–6× markup at SaaS seat prices.
+- Premium/GPT‑4o tier requests are tracked separately as `assistant_premium_messages` and bill from top-up packs or BYOK only.
+- Daily check-ins are enabled for every user (local heuristics if no credits). Hourly evaluations run for teams with available credits; evaluations only emit feed messages when priority thresholds trigger.
+- Admins can configure per-team frequency (down to the minute), quiet hours, and whether premium models are allowed.
+
 
