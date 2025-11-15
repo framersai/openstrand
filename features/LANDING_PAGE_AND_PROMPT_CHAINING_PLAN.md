@@ -19,10 +19,13 @@
   - All copy & iconography drawn from `landing/config.ts` so marketing can localize quickly.
   - Shared CTA component wired to Supabase auth (Community) and Stripe checkout (Teams/Enterprise).
   - SEO schema bits (FAQ, HowTo) auto-generated from config for structured data.
-  - Feature tile for “Deterministic Data Intelligence” that explains vocab/NER analytics (offline) plus the optional “LLM verification” upgrade badge for Teams/Enterprise.
+  - Feature tile for "Deterministic Data Intelligence" that explains vocab/NER analytics (offline) plus the optional "LLM verification" upgrade badge for Teams/Enterprise.
+  - Feature tile for "RAG & Semantic Search" with "Ask questions, get answers with citations. Local (free) or cloud models."
+  - Feature tile for "Cost Prediction" with "See costs before you click. Dry-run estimates for all AI operations."
+  - Feature tile for "Uncensored Models" with badges for Ollama, Mistral, OpenRouter.
   - Pricing ribbons:
-    - “Community Edition – Free • One global Loom • Offline forever.”
-    - “Teams Edition – $1,000 lifetime (launch) / $500 power-user / $250 student. Multiple Looms, RBAC, governance.” Include countdown to when pricing switches to annual $100 upgrades.
+    - "Community Edition – Free • One global Loom • Offline forever • Local models ($0)."
+    - "Teams Edition – $1,000 lifetime (launch) / $500 power-user / $250 student. Multiple Looms, RBAC, governance, cloud models, cost tracking." Include countdown to when pricing switches to annual $100 upgrades.
 
 - **Metrics & Experimentation**
   - Pixel for CTA click tracking (mixpanel segment).

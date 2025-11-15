@@ -17,11 +17,15 @@ Fair, transparent comparison of Community vs Teams/Enterprise features.
 | Placeholder policy engine | Yes | Team policies & analytics |
 | Visibility cascades | Global workspace only | Per-team + per-project scopes |
 | Deterministic data intelligence (vocabulary, NER, stats) | Yes (local, offline) | Yes + RBAC scopes + optional LLM verification |
+| RAG & Semantic Search | Yes (local models only) | Yes (local + cloud: OpenAI, Anthropic, Mistral, OpenRouter) |
+| Question answering with citations | Yes (Ollama) | Yes (all providers) |
+| Cost estimation & dry-run | Yes (local = $0) | Yes (all providers with budgets) |
+| Uncensored models | Yes (Ollama) | Yes (Ollama, Mistral, OpenRouter) |
 | Workspace / Loom limits | 1 global Loom for entire catalog | Unlimited Looms/projects per team |
 | Multi-user / RBAC | Single user (optional sign-in for sync) | Full teams, guests, external reviewers |
 | Custom domains | — | Yes |
 | SSO & governance | — | Yes |
-| Billing & quotas | — | Usage metering + SLA dashboards |
+| Billing & quotas | — | Usage metering + SLA dashboards + cost tracking |
 
 ### Pricing & Licensing
 

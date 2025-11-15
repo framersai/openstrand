@@ -1,183 +1,105 @@
-﻿# OpenStrand Architecture
-
-**Last Updated:** November 2025  
-**Stack:** TypeScript end-to-end (Node.js 18+, Next.js 14, Fastify 4, Prisma 5)
+﻿Building your platform on **OpenStrand** with **offline PKM, AI‑powered visualization and a community‑driven global wiki** substantially broadens the mission and the audience.  You’re no longer just shipping an ed‑tech tool—you’re creating a knowledge ecosystem with local autonomy and global collaboration.  Below is an integrated strategy covering product positioning, branding, audience segmentation and go‑to‑market tactics.
 
 ---
 
-## 1. High-Level View
+## 1. How OpenStrand + PKM + Global Wiki affects positioning
 
-```
-browser / electron shell
-        Γöé
-        Γû╝
-openstrand-app (Next.js, React 18)
-        Γöé          Γû▓
-REST / WebSockets  Γöé SWR (React Query)
-        Γû╝          Γöé
-@framers/openstrand-teams-backend (Fastify + Prisma)
-        Γöé
-        Γû╝
-PostgreSQL ΓöÇΓöÇΓöÇ or ΓöÇΓöÇΓöÇ PGlite (embedded)  ΓåÉ fallback for local/offline
-```
-
-Shared types, validation schemas, and utility functions live inside `packages/openstrand-sdk` to keep the API surface consistent across the monorepo.
-
-### Collaborative Slip-Box & Recursive Strands
-
-- `Strand`, `StrandLink`, `StrandHierarchy`, and `StrandVisibilityCache` replace the legacy `ContentCatalog`/`WeaveEdge` layout.
-- Structural and conceptual links are unified through `StrandLinkType` (`STRUCTURAL`, `CONCEPTUAL`, `PLACEHOLDER`, `REFERENCE`, `DERIVED`).
-- Per-scope DAG enforcement lives in `StrandHierarchy`; every scope guarantees a single primary parent while allowing cross-scope reuse.
-- Authorship metadata is captured on strands (`createdBy`, `updatedBy`, `coAuthorIds`) and on links (`createdBy`, `provenance`, `justification`).
-- Visibility cascades are cached in `StrandVisibilityCache` to keep descendant permissions responsive and auditable.
-- Structure changes flow through `StrandStructureRequest` with approval queues, Slack/email hooks (roadmap), and background cascades.
-- See [`docs/Collaborative-Zettelkasten.md`](./Collaborative-Zettelkasten.md) for the updated PKMS workflows.
+1. **Open‐source ethos becomes core.**  Unlike proprietary apps, you’re offering full code transparency and self‑hosting.  This grants users control over their data, the ability to customize and integrate new features, and the freedom to modify the system and contribute back.  It also introduces responsibilities: you must communicate that self‑hosting requires internal resources and that open‑source projects rely on ongoing community support.
+2. **Dual‑environment architecture: local + global.**  Offline‑first PKM appeals to privacy‑conscious users and those in low‑connectivity regions.  The global wiki offers a shared, public knowledge graph curated via OpenStrand.  Your messaging should emphasise both independence (local PKM) and collaboration (global wiki).
+3. **Community as co‑creator and marketer.**  Open‑source marketing differs from traditional software marketing.  The ClearVoice article notes that open‑source marketing must address multiple stakeholders—developers, vendors and end‑users—and rely on community contributions.  Opensource.com adds that vibrant communities reduce marketing research costs because user feedback guides development.
+4. **Hybrid revenue model.**  Free core services (PKM, wiki access, basic AI visualizations) build user base and community; premium tiers (advanced AI, team collaboration, custom visual themes, dataset visualizations) generate revenue.  Donations and marketplace revenue (plugins/themes) support sustainability, consistent with open‑source norms.
 
 ---
 
-## 2. Monorepo Layout
+## 2. Branding strategy
 
-| Directory                         | Purpose                                                                |
-|----------------------------------|------------------------------------------------------------------------|
-| `openstrand-app/`                | Next.js App Router application (public UX, offline-first)              |
-| `openstrand-admin/`              | Optional admin interface (kept private; not part of OSS surface)       |
-| `packages/openstrand-teams-backend/` | Fastify API, background jobs, billing integrations, Prisma schema   |
-| `packages/openstrand-sdk/`       | TypeScript client/SDK (shared models, validation, API wrappers)        |
-| `scripts/`                       | Release scripts, database helpers, automation                          |
-| `docs/`                          | Product & engineering documentation                                    |
-
-All workspaces are managed with npm workspaces and a single `package-lock.json`.
+| Element             | Recommendation                                                                                                                                                                                           | Rationale                                                                                 |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Name**            | Keep “OpenStrand” as the **backbone brand** and introduce sub‑brands: **OpenStrand Studio** (personal vault & AI visualizer), **OpenStrand Weave** (global wiki), **OpenStrand Loom** (developer tools). | Ties everything to the unified schema; sub‑brands clarify product pillars.                |
+| **Tagline**         | “Weave your knowledge locally, connect globally.”                                                                                                                                                        | Conveys dual focus on personal and community knowledge.                                   |
+| **Visual identity** | Use clean, modular designs with vibrant but calm color palettes; incorporate “threads” and “weave” motifs. Offer **theme packs** to encourage personalization.                                           | Visual consistency across products while enabling user customization.                     |
+| **Voice & tone**    | Transparent, empowering and inclusive.  Balance technical depth (appealing to developers and researchers) with accessible language for students and hobbyists.                                           | Research shows that a mix of technical and non‑technical content broadens audience reach. |
 
 ---
 
-## 3. Application Layers
+## 3. Audience segmentation & messaging
 
-### Frontend ΓÇô `openstrand-app`
-- Next.js 14 App Router with Server Components where appropriate.
-- Tailwind + Radix UI for theming and accessible primitives.
-- Zustand for UI state, React Query for API caching, and localStorage/IndexedDB for offline drafts.
-- Dynamic routing covers: `/strands`, `/threads`, `/pkms`, `/settings`.
-- Feature gating reads `OPENSTRAND_ENVIRONMENT` to hide cloud-only flows on local installs.
+1. **Power users & developers**
 
-### Backend ΓÇô `@framers/openstrand-teams-backend`
-- Fastify 4 with typed routes (Zod schemas).
-- Prisma ORM to target both PostgreSQL (cloud) and PGlite (embedded).
-- Modular services: billing, search, graph analytics, AI integrations, ingestion pipelines.
-- Background jobs via BullMQ + Redis (optional; falls back to in-process mode during local dev).
-- Authentication modes: local credentials, JWT session tokens, optional Supabase integration.
-- Rate limiting and structured logging baked in (pino + pino-pretty for dev).
-- Collaborative notes: recursive strand hierarchies, placeholder policies, link attribution, and approval flows exposed via `/strands`, `/strands/:id/relationships`, and `/strands/:id/structure/requests`.
+   * **Needs:** local control, extensibility, API access.
+   * **Message:** “Own your data, customize your workflow. Build plugins and contribute to the global weave.”
+   * **Channels:** Hacker News, Reddit (r/privacy, r/selfhosted), open‑source conferences, developer forums.
+2. **Researchers & knowledge workers**
 
-### Shared SDK ΓÇô `@framers/openstrand-sdk`
-- Generated types from Prisma schema and OpenAPI routes.
-- Node + Browser friendly bundle (`CJS`, `ESM`, and `.d.ts` outputs).
-- Fetch wrapper with retry/backoff, SSE helpers for long-running tasks.
+   * **Needs:** advanced search, reliable citations, dataset visualization, offline access.
+   * **Message:** “Your research library meets AI insights. Connect your notes to a living knowledge graph.”
+   * **Channels:** academic blogs, LinkedIn groups, podcasts, webinars.
+3. **Educators & learners (formal and self‑directed)**
 
----
+   * **Needs:** spaced‑repetition scheduling, interactive visual learning tools, collaborative spaces.
+   * **Message:** “Turn study into exploration.  Create, visualize, and share knowledge—in class or beyond.”
+   * **Channels:** ed‑tech communities, teacher blogs, YouTube tutorials, micro‑influencer partnerships.
+4. **General productivity users & “life hackers”**
 
-## 4. Data & Storage
-
-| Use Case                     | Default (Local)              | Cloud / Team deployment                   |
-|------------------------------|------------------------------|-------------------------------------------|
-| Primary database             | PGlite (embedded PostgreSQL) | PostgreSQL 14+ (Supabase, RDS, Timescale) |
-| File storage                 | Local filesystem             | S3-compatible bucket (optional)           |
-| Background jobs              | In-memory queue              | Redis + BullMQ                            |
-| Search / vector store        | Prisma + JSON fields         | (Roadmap) External vector DB integrations |
-| Collaborative metadata       | Prisma columns (`noteType`, `createdBy`) | Same schema; use migrations |
-
-Prisma schema is the single source of truth (`packages/openstrand-teams-backend/prisma/schema.prisma`). Migration commands (`npm run prisma:migrate`) generate SQL appropriate for the target provider.
+   * **Needs:** task and habit tracking, gamification, personal goals.
+   * **Message:** “Transform your life into a game—collect points while organizing your world.”
+   * **Channels:** Habitica‑like communities, self‑improvement blogs, TikTok/Instagram micro‑influencers, newsletters.
 
 ---
 
-## 5. Runtime Detection
+## 4. Market focus & geographic considerations
 
-`start-local.sh` exports:
+1. **Established markets (US, Europe, high‑connectivity regions)**
 
-```
-OPENSTRAND_ENVIRONMENT=local
-OPENSTRAND_IS_CLOUD=false
-```
+   * Lead with productivity features, AI visualizations and cross‑platform sync.  Emphasise privacy and local‑storage options for users concerned about cloud data.
+2. **Emerging markets & low‑connectivity regions**
 
-These flags drive feature toggles for:
-- Billing flows (Stripe / LemonSqueezy disabled locally)
-- Supabase integration (skipped when `OPENSTRAND_ENVIRONMENT=local`)
-- Telemetry endpoints (disabled unless explicitly enabled)
+   * Highlight offline‑first design and the ability to self‑host on local servers.  Provide lightweight installers and community translations.  Local partners (NGOs, universities) can host global wiki mirrors to improve access.
+3. **Academic & scientific sectors worldwide**
 
-In hosted environments set `OPENSTRAND_ENVIRONMENT=cloud` (or `self_hosted`) to unlock cloud-only capabilities.
+   * Position OpenStrand as an open alternative to proprietary research management tools.  Showcases of dataset visualization (via LIDA) and retrieval‑augmented search can attract universities.  Offer discounted or free “OpenStrand Scholar” plans.
 
 ---
 
-## 6. Cross-Cutting Concerns
+## 5. Go‑to‑market tactics
 
-- **Authentication**  
-  - Local mode: email/password + Argon2  
-  - JWT access tokens stored as HttpOnly cookies  
-  - OIDC / Supabase support behind feature flags
+### 5.1 Community‑first launch
 
-- **Authorization**  
-  - Role-based (Viewer, Contributor, Admin, Owner)  
-  - Fine-grained permissions on strands, teams, AI usage
+* **Open beta program:** Invite open‑source contributors and early adopters.  Provide a clear CONTRIBUTING guide and maintain an active Discord/Forum.  Encourage translation, plugin development and documentation contributions.
+* **Hackathons & knowledge jams:** Host online events where participants build custom visualizations, create local PKM workflows or add content to the global wiki.  Offer swag and early supporter badges.
 
-- **Validation**  
-  - Zod schemas shared between backend and SDK  
-  - `@fastify/ajv-compiler` handles request/response contracts
+### 5.2 Content & education marketing
 
-- **Observability**  
-  - Pino structured logging  
-  - Health checks at `/health` and `/ready`  
-  - Integration points for Sentry / OpenTelemetry (optional)
+* **Knowledge‑management blog:** Publish articles on note‑taking, retrieval practice, spaced repetition and data visualization.  Cite research showing that content marketing educates audiences—72 % of marketers see it as an effective education tool.
+* **Video tutorials & mini‑courses:** Demonstrate how to migrate from Notion/Evernote to OpenStrand.  Use real‑life datasets and show natural language visualization workflows.
+* **Docs & learning paths:** Provide open curriculum modules to teach newcomers about PKM, open‑source knowledge and OpenStrand’s schema.  Encourage educators to adapt them.
 
----
+### 5.3 Paid & low‑cost advertising
 
-## 7. External Integrations
+* **Reddit & Google Ads:** Target high‑intent queries and niche subreddits with low cost per click (Reddit averages $0.50–$4 CPC vs. Google’s $1.63–$2.64 average).  Focus on developer, privacy and productivity communities.
+* **Micro‑influencers:** Collaborate with small creators (<50 k followers) who often deliver 60 % higher engagement than celebrities.  Provide them free Pro accounts and share revenue from any resulting subscriptions.
 
-| Area            | Default       | Optional / Cloud                                                   |
-|-----------------|---------------|--------------------------------------------------------------------|
-| LLM providers   | BYOK via REST | OpenRouter, OpenAI, Anthropic, Azure OpenAI                        |
-| Storage         | Local FS      | AWS S3, Cloudflare R2 (via `STORAGE_PROVIDER`)                     |
-| Billing         | Disabled      | Stripe or LemonSqueezy (choose via `BILLING_PROVIDER`)             |
-| Authentication  | Local login   | Supabase Auth (OIDC, magic links)                                 |
-| Realtime        | Disabled      | WebSocket bridge powered by BullMQ + Redis                        |
+### 5.4 Partnership & institutional channels
 
-All integrations are optional; the OSS distribution runs without network access.
+* **Educational institutions:** Offer school licenses and integration with LMS systems (Canvas, Moodle).  Provide teacher dashboards using OpenStrand metrics (e.g., spaced‑repetition adherence).  Seek endorsements from professors working on knowledge graphs.
+* **Open‑data & library networks:** Partner with libraries to host public knowledge mirrors.  This resonates with the open‑source principle of public good and builds authority.
+
+### 5.5 Monetization & growth levers
+
+* **Freemium tiers:** Free core with limited AI usage and local storage; paid tiers unlock unlimited AI visualizations, multi‑device sync, dataset uploads and advanced queries.  Offer discounted student pricing.
+* **Marketplace & donation model:** A revenue share on plugins, templates and courses; donation options for supporting the global wiki.
+* **Enterprise & “on‑prem” packages:** For organizations needing dedicated support, security audits and custom deployments.  This helps fund continued open‑source development while addressing the “no dedicated support” weakness of open‑source solutions.
 
 ---
 
-## 8. Deployment Scenarios
+## 6. Risk mitigation & governance
 
-1. **Local / Offline**  
-   - `./start-local.sh` (PGlite, no external dependencies)  
-   - Desktop builds via Electron and Capacitor (in progress)
-
-2. **Self-hosted**  
-   - Deploy API to Render, Fly.io, Railway, or Kubernetes  
-   - Host Next.js app on Vercel/Netlify or as static export  
-   - Provide PostgreSQL + Redis (Docker Compose template included)
-
-3. **Managed Cloud (Roadmap)**  
-   - Multi-tenant backend  
-   - Billing, analytics, SSO  
-   - Terraform modules and observability stack
+* **Development & maintenance costs:** Be transparent about the need for internal resources to set up and maintain self‑hosted installations.  Offer optional paid support packages.
+* **Project stagnation:** Combat the risk of maintainers leaving by creating a foundation or a non‑profit that stewards OpenStrand.  Encourage corporate sponsorship and grant funding.
+* **User support & feature visibility:** Provide clear roadmaps and regular updates; maintain public forums for support.  Recognize that lack of dedicated support and limited visibility on new features are downsides of open‑source projects.
 
 ---
 
-## 9. Roadmap Snapshot
+## Summary
 
-- Finish Prisma-backed billing service refactor & tests
-- Pluggable vector search providers (Qdrant, Pinecone)
-- Graph sync + CRDT collaboration
-- Cross-device presence and comments
-- Stable Electron build pipeline
-
-See [`docs/ROADMAP.md`](ROADMAP.md) for detailed milestones.
-
----
-
-## 10. Developer Notes
-
-- Use `npm run typecheck` before commits; workspaces share `tsconfig.base.json`.
-- When touching Prisma schema run `npm run prisma:generate --workspace @framers/openstrand-teams-backend`.
-- Keep features behind `featureFlags` (frontend) or `FeatureGate` (backend) for gradual rollout.
-- Prefer `@framers/openstrand-sdk` helpers when consuming APIs to avoid drifting types.
-
-The architecture is intentionally modularΓÇöswap providers, plug in additional queues, or override services by extending the relevant Fastify plugin. Contributions that keep this separation clean are very welcome.
+Integrating OpenStrand with an offline‑first PKM and a community‑driven global wiki transforms your venture into a **knowledge commons** rather than a mere tool.  Marketing and brand strategy must therefore foreground **open‑source values**, **community collaboration** and the **dual promise of autonomy and connection**.  By segmenting your audiences, tailoring messages to their needs, and balancing community‑driven growth with targeted outreach, you can build a sustainable ecosystem that stands out against incumbents while aligning with the broader open‑knowledge movement.
