@@ -5795,4 +5795,194 @@ As we build OpenStrand, we invite educators, developers, researchers, and learne
 
 ---
 
+## Appendix D: Contribution Guidelines
+
+### Getting Started
+
+OpenStrand is a monorepo using Yarn workspaces. The main packages are:
+
+- **`packages/openstrand-teams-backend`** – Fastify API server (TypeScript)
+- **`openstrand-app`** – Next.js frontend (TypeScript + React)
+- **`openstrand-admin`** – Admin dashboard (Next.js)
+- **`packages/openstrand-sdk`** – TypeScript SDK for plugins
+
+### Prerequisites
+
+- **Node.js** 18.17.0 or later
+- **Yarn** 3.6.4 (via Corepack)
+- **PostgreSQL** 15+ (for backend development)
+- **Docker** (optional, for local services)
+
+### Local Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/framersai/openstrand-monorepo.git
+cd openstrand-monorepo
+
+# Initialize submodules
+git submodule update --init --recursive
+
+# Install dependencies
+yarn install
+
+# Set up backend environment
+cd packages/openstrand-teams-backend
+cp .env.example .env
+# Edit .env with your PostgreSQL connection string
+
+# Run Prisma migrations
+yarn prisma migrate dev
+
+# Generate Prisma Client
+yarn prisma generate
+
+# Seed templates (optional)
+yarn seed:templates
+
+# Start backend
+yarn dev
+
+# In a new terminal, start frontend
+cd ../../openstrand-app
+yarn dev
+
+# In another terminal, start admin (optional)
+cd ../openstrand-admin
+yarn dev
+```
+
+### Build Commands
+
+```bash
+# Build all packages
+yarn build
+
+# Build specific workspace
+yarn workspace @framers/openstrand-teams-backend build
+yarn workspace openstrand-app build
+yarn workspace openstrand-admin build
+
+# Type-check without building
+yarn workspace @framers/openstrand-teams-backend tsc --noEmit
+```
+
+### Testing
+
+```bash
+# Run all tests
+yarn test
+
+# Run backend tests
+yarn workspace @framers/openstrand-teams-backend test
+
+# Run frontend tests
+yarn workspace openstrand-app test
+
+# E2E tests (Playwright)
+yarn workspace openstrand-app test:e2e
+```
+
+### Linting & Formatting
+
+```bash
+# Lint all workspaces
+yarn lint
+
+# Format code
+yarn format
+
+# Check formatting
+yarn format:check
+```
+
+### Database Migrations
+
+```bash
+cd packages/openstrand-teams-backend
+
+# Create a new migration
+yarn prisma migrate dev --name your_migration_name
+
+# Apply migrations in production
+yarn prisma migrate deploy
+
+# Reset database (development only)
+yarn prisma migrate reset
+```
+
+### Code Style Guidelines
+
+- **TypeScript**: Strict mode enabled, no `any` types without justification
+- **React**: Functional components with hooks, avoid class components
+- **Naming**: 
+  - Files: `kebab-case.ts`
+  - Components: `PascalCase.tsx`
+  - Functions: `camelCase`
+  - Constants: `UPPER_SNAKE_CASE`
+- **Imports**: Absolute imports via `@/` path alias
+- **Comments**: TSDoc for public APIs, inline comments for complex logic
+
+### Commit Message Convention
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+
+**Examples**:
+```
+feat(assistant): add daily check-in scheduling
+fix(auth): resolve session expiry bug
+docs(readme): update installation instructions
+```
+
+### Pull Request Process
+
+1. **Fork** the repository and create a feature branch
+2. **Write tests** for new features
+3. **Update documentation** if changing APIs
+4. **Run linters** and fix all warnings
+5. **Submit PR** with clear description and linked issues
+6. **Address review feedback** promptly
+
+### Architecture Decisions
+
+- **Backend**: Fastify for performance, Prisma for type-safe DB access
+- **Frontend**: Next.js 14 with App Router, Tailwind CSS for styling
+- **State Management**: Zustand for client state, TanStack Query for server state
+- **Authentication**: JWT with refresh tokens, optional OAuth
+- **Real-time**: Socket.io for presence and live updates
+
+### Performance Guidelines
+
+- **Bundle Size**: Keep frontend chunks < 200 KB gzipped
+- **API Response**: Target < 200ms for most endpoints
+- **Database**: Use indexes for frequently queried fields
+- **Caching**: Redis for hot data, CDN for static assets
+
+### Security Best Practices
+
+- **Input Validation**: Zod schemas for all API inputs
+- **SQL Injection**: Use Prisma's parameterized queries
+- **XSS**: Sanitize user content with DOMPurify
+- **CSRF**: SameSite cookies + CSRF tokens for mutations
+- **Rate Limiting**: Enforce per-user and per-IP limits
+
+### Getting Help
+
+- **Discord**: [discord.gg/openstrand](https://discord.gg/openstrand)
+- **GitHub Discussions**: For feature requests and Q&A
+- **GitHub Issues**: For bug reports
+- **Email**: dev@framers.com for security issues
+
+---
+
 *This document is version 2.0 of the OpenStrand Architecture. For the latest version, visit [docs.openstrand.org](https://docs.openstrand.org).*
